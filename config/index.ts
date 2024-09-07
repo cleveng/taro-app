@@ -19,7 +19,7 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
     },
     sourceRoot: 'src',
     outputRoot: 'dist',
-    plugins: [],
+    plugins: ['taro-plugin-compiler-optimization'],
     defineConstants: {},
     copy: {
       patterns: [],
@@ -30,22 +30,18 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
       type: 'vite',
       vitePlugins: [
         {
-          // 通过 vite 插件加载 postcss,
           name: 'postcss-config-loader-plugin',
           config(config) {
-            // 加载 tailwindcss
             if (typeof config.css?.postcss === 'object') {
               config.css?.postcss.plugins?.unshift(tailwindcss())
             }
           },
         },
         uvtw({
-          // rem转rpx
           rem2rpx: true,
-          // 除了小程序这些，其他平台都 disable
           disabled: process.env.TARO_ENV === 'h5' || process.env.TARO_ENV === 'harmony' || process.env.TARO_ENV === 'rn'
         })
-      ] as Plugin[] // 从 vite 引入 type, 为了智能提示
+      ] as Plugin[]
     },
     mini: {
       postcss: {
@@ -60,7 +56,10 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
             generateScopedName: '[name]__[local]___[hash:base64:5]'
           }
         }
-      }
+      },
+      optimizeMainPackage: {
+        enable: true,
+      },
     },
     h5: {
       publicPath: '/',
