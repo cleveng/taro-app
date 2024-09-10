@@ -22,3 +22,5 @@ https://github.com/toFrankie/blog/issues/331
     <Cart />
   </i>
 </NavBar>
+
+https://react-icons.github.io/react-icons/

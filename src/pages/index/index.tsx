@@ -1,6 +1,6 @@
 import { View } from '@tarojs/components'
 import { useLoad } from '@tarojs/taro'
-import './index.scss'
+
 import { Button, Tag, Price, Dialog, Image, Toast } from '@nutui/nutui-react'
 import Taro from '@tarojs/taro'
 import { toBase64String } from '@cakioe/kit.js'
