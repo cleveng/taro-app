@@ -24,3 +24,5 @@ https://github.com/toFrankie/blog/issues/331
 </NavBar>
 
 https://react-icons.github.io/react-icons/
+https://juejin.cn/post/7084674623425478686
+https://github.com/pmndrs/zustand/blob/main/docs/guides/slices-pattern.md
