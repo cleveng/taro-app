@@ -20,6 +20,31 @@ export default function Index() {
     Taro.showToast({ title: '登录成功', icon: 'none' })
   }
 
+  const loginWithWechat = async () => {
+    Taro.showToast({ title: '开始请求', icon: 'none' })
+    try {
+      const res = await Taro.login()
+      try {
+        const value = await Taro.request({
+          url: 'https://www.awish.vip/auth/wechat/callback?app=ds',
+          data: {
+            state: '',
+            code: res.code
+          },
+          header: {
+            appid: 'dsc6805f597d8c411e'
+          },
+          method: 'POST'
+        })
+        console.log(value)
+      } catch (error) {
+        console.log(error)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       {isWeb && (
@@ -43,7 +68,9 @@ export default function Index() {
             className=''
             footer={
               <>
-                <Button type='info'>登录</Button>
+                <Button block type='info' onClick={loginWithWechat}>
+                  登录
+                </Button>
               </>
             }
           >
