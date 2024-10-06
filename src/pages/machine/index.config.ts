@@ -1,4 +1,4 @@
 export default definePageConfig({
-  navigationBarTitleText: '登录',
+  navigationBarTitleText: '设备管理',
   usingComponents: {}
 })

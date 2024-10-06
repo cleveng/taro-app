@@ -1,18 +1,25 @@
 import type { UserConfigExport } from '@tarojs/cli'
 import { defineConfig } from '@tarojs/cli'
 import path from 'path'
-import tailwindcss from 'tailwindcss'
-import type { Plugin } from 'vite'
-import { UnifiedViteWeappTailwindcssPlugin as uvtw } from 'weapp-tailwindcss/vite'
+import { UnifiedWebpackPluginV5 } from 'weapp-tailwindcss/webpack'
+
 import devConfig from './dev'
 import prodConfig from './prod'
 
 // https://taro-docs.jd.com/docs/next/config#defineconfig-辅助函数
-export default defineConfig<'vite'>(async (merge, { command, mode }) => {
-  const baseConfig: UserConfigExport<'vite'> = {
-    projectName: 'vemdom',
+export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
+  const baseConfig: UserConfigExport<'webpack5'> = {
+    projectName: 'app',
     date: '2024-9-4',
-    designWidth: 750,
+    designWidth(input) {
+      // question
+      if ((input as never as any)?.file?.replace(/\\+/g, '/').indexOf('@nutui') > -1) {
+        return 375
+      }
+
+      // 全局使用 Taro 默认的 750 尺寸
+      return 750
+    },
     deviceRatio: {
       640: 2.34 / 2,
       750: 1,
@@ -33,31 +40,33 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
     },
     framework: 'react',
     compiler: {
-      type: 'vite',
+      type: 'webpack5',
       prebundle: {
         force: true,
         enable: false, // <https://nutui.jd.com/taro/react/2x/#/zh-CN/guide/start-react>
         exclude: ['@nutui/nutui-react-taro', '@nutui/icons-react-taro']
-      },
-      vitePlugins: [
-        {
-          name: 'postcss-config-loader-plugin',
-          config(config) {
-            if (typeof config.css?.postcss === 'object') {
-              config.css?.postcss.plugins?.unshift(tailwindcss())
-            }
-          }
-        },
-        uvtw({
-          rem2rpx: true,
-          disabled: process.env.TARO_ENV === 'h5' || process.env.TARO_ENV === 'harmony' || process.env.TARO_ENV === 'rn'
-        })
-      ] as Plugin[]
+      }
     },
     cache: {
       enable: false
     },
     mini: {
+      webpackChain(chain, _) {
+        chain.merge({
+          plugin: {
+            install: {
+              plugin: UnifiedWebpackPluginV5,
+              args: [
+                {
+                  appType: 'taro',
+                  rem2rpx: true
+                  // disabled: ['h5', 'harmony', 'rn'].includes(process.env.TARO_ENV)
+                }
+              ]
+            }
+          }
+        })
+      },
       postcss: {
         pxtransform: {
           enable: true,

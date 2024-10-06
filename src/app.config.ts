@@ -1,5 +1,5 @@
 export default defineAppConfig({
-  pages: ['pages/index/index', 'pages/login/index', 'pages/welcome/index'],
+  pages: ['pages/index/index', 'pages/login/index', 'pages/machine/index'],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
@@ -7,7 +7,7 @@ export default defineAppConfig({
     navigationBarTextStyle: 'black'
   },
   tabBar: {
-    custom: false,
+    custom: true,
     color: '#666',
     selectedColor: '#333',
     backgroundColor: '#fff',
@@ -15,12 +15,13 @@ export default defineAppConfig({
     list: [
       {
         pagePath: 'pages/index/index',
-        text: '首页'
+        text: 'index'
       },
       {
-        pagePath: 'pages/login/index',
-        text: '登录'
+        pagePath: 'pages/machine/index',
+        text: 'login'
       }
     ]
-  }
+  },
+  usingComponents: {}
 })
