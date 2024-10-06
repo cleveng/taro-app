@@ -2,8 +2,8 @@ import React from 'react'
 
 import { useLaunch } from '@tarojs/taro'
 
-import './app.scss'
-import '@nutui/nutui-react/dist/style.css'
+import '@nutui/nutui-react-taro/dist/style.css'
+import './assets/styles/app.scss'
 
 type Props = {
   children: React.ReactNode

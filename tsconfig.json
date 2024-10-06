@@ -23,7 +23,7 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["./src", "./types", "./config", "tailwind.config.ts"],
+  "include": ["./src", "./types", "./config", "tailwind.config.ts", "codegen.ts"],
   "exclude": ["node_modules", "dist"],
   "compileOnSave": false
 }

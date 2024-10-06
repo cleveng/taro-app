@@ -1,6 +1,8 @@
-import { defineConfig, type UserConfigExport } from '@tarojs/cli'
-import type { Plugin } from 'vite'
+import type { UserConfigExport } from '@tarojs/cli'
+import { defineConfig } from '@tarojs/cli'
+import path from 'path'
 import tailwindcss from 'tailwindcss'
+import type { Plugin } from 'vite'
 import { UnifiedViteWeappTailwindcssPlugin as uvtw } from 'weapp-tailwindcss/vite'
 import devConfig from './dev'
 import prodConfig from './prod'
@@ -17,9 +19,13 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
       375: 2,
       828: 1.81 / 2
     },
+    sass: {
+      resource: [path.resolve(__dirname, '..', 'src/assets/styles/variables.scss')]
+      // data: `@import "@nutui/nutui-react-taro/dist/styles/variables.scss";`
+    },
     sourceRoot: 'src',
     outputRoot: 'dist',
-    plugins: ['taro-plugin-compiler-optimization'],
+    plugins: ['@tarojs/plugin-html', 'taro-plugin-compiler-optimization'],
     defineConstants: {},
     copy: {
       patterns: [],
@@ -28,6 +34,11 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
     framework: 'react',
     compiler: {
       type: 'vite',
+      prebundle: {
+        force: true,
+        enable: false, // <https://nutui.jd.com/taro/react/2x/#/zh-CN/guide/start-react>
+        exclude: ['@nutui/nutui-react-taro', '@nutui/icons-react-taro']
+      },
       vitePlugins: [
         {
           name: 'postcss-config-loader-plugin',
@@ -35,13 +46,16 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
             if (typeof config.css?.postcss === 'object') {
               config.css?.postcss.plugins?.unshift(tailwindcss())
             }
-          },
+          }
         },
         uvtw({
           rem2rpx: true,
           disabled: process.env.TARO_ENV === 'h5' || process.env.TARO_ENV === 'harmony' || process.env.TARO_ENV === 'rn'
         })
       ] as Plugin[]
+    },
+    cache: {
+      enable: false
     },
     mini: {
       postcss: {
@@ -58,8 +72,8 @@ export default defineConfig<'vite'>(async (merge, { command, mode }) => {
         }
       },
       optimizeMainPackage: {
-        enable: true,
-      },
+        enable: true
+      }
     },
     h5: {
       publicPath: '/',
