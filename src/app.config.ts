@@ -1,5 +1,3 @@
-import Taro, { ENV_TYPE } from '@tarojs/taro'
-
 export default defineAppConfig({
   pages: ['pages/index/index', 'pages/login/index', 'pages/machine/index'],
   window: {
@@ -9,7 +7,7 @@ export default defineAppConfig({
     navigationBarTextStyle: 'black'
   },
   tabBar: {
-    custom: Taro.getEnv() === ENV_TYPE.WEAPP,
+    custom: true,
     color: '#666',
     selectedColor: '#333',
     backgroundColor: '#fff',
@@ -28,5 +26,6 @@ export default defineAppConfig({
         text: 'machine'
       }
     ]
-  }
+  },
+  usingComponents: {}
 })

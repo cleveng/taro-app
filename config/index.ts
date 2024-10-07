@@ -1,23 +1,24 @@
-import type { UserConfigExport } from '@tarojs/cli'
-import { defineConfig } from '@tarojs/cli'
 import path from 'path'
+
+import { defineConfig } from '@tarojs/cli'
+import { Input } from 'postcss'
 import { UnifiedWebpackPluginV5 } from 'weapp-tailwindcss/webpack'
+
+import type { ConfigEnv, UserConfigExport } from '@tarojs/cli'
 
 import devConfig from './dev'
 import prodConfig from './prod'
 
 // https://taro-docs.jd.com/docs/next/config#defineconfig-辅助函数
-export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
+export default defineConfig<'webpack5'>((merge, _: ConfigEnv) => {
   const baseConfig: UserConfigExport<'webpack5'> = {
     projectName: 'app',
     date: '2024-9-4',
-    designWidth(input) {
-      // question
-      if (input?.file?.replace(/\\+/g, '/').indexOf('@nutui') > -1) {
+    designWidth: (input?: Input): number => {
+      if (input?.file && input?.file?.replace(/\\+/g, '/').indexOf('@nutui') > -1) {
         return 375
       }
 
-      // 全局使用 Taro 默认的 750 尺寸
       return 750
     },
     deviceRatio: {
@@ -51,10 +52,10 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       enable: false
     },
     mini: {
-      webpackChain(chain, _) {
+      webpackChain(chain, _webpack) {
         chain.merge({
           plugin: {
-            install: {
+            tailwind: {
               plugin: UnifiedWebpackPluginV5,
               args: [
                 {
@@ -99,7 +100,7 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
           config: {}
         },
         cssModules: {
-          enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
+          enable: true, // 默认为 false，如需使用 css modules 功能，则设为 true
           config: {
             namingPattern: 'module', // 转换模式，取值为 global/module
             generateScopedName: '[name]__[local]___[hash:base64:5]'
@@ -111,7 +112,7 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       appName: 'taroDemo',
       postcss: {
         cssModules: {
-          enable: false // 默认为 false，如需使用 css modules 功能，则设为 true
+          enable: true // 默认为 false，如需使用 css modules 功能，则设为 true
         }
       }
     }
@@ -120,6 +121,7 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
     // 本地开发构建配置（不混淆压缩）
     return merge({}, baseConfig, devConfig)
   }
+
   // 生产构建配置（默认开启压缩混淆等）
   return merge({}, baseConfig, prodConfig)
 })
