@@ -20,7 +20,8 @@
     "typeRoots": ["node_modules/@types"],
     "paths": {
       // TS5090 leading './'
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "#/types/*": ["./types/*"]
     }
   },
   "include": ["./src", "./types", "./config", "tailwind.config.ts", "codegen.ts"],
