@@ -2,6 +2,7 @@ import path from 'path'
 
 import { defineConfig } from '@tarojs/cli'
 import { Input } from 'postcss'
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 import { UnifiedWebpackPluginV5 } from 'weapp-tailwindcss/webpack'
 
 import type { ConfigEnv, UserConfigExport } from '@tarojs/cli'
@@ -53,6 +54,8 @@ export default defineConfig<'webpack5'>((merge, _: ConfigEnv) => {
     },
     mini: {
       webpackChain(chain, _webpack) {
+        chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
+
         chain.merge({
           plugin: {
             tailwind: {
@@ -88,7 +91,10 @@ export default defineConfig<'webpack5'>((merge, _: ConfigEnv) => {
     h5: {
       publicPath: '/',
       staticDirectory: 'static',
-
+      output: {
+        filename: 'js/[name].[hash:8].js',
+        chunkFilename: 'js/[name].[chunkhash:8].js'
+      },
       miniCssExtractPluginOption: {
         ignoreOrder: true,
         filename: 'css/[name].[hash].css',
@@ -106,6 +112,9 @@ export default defineConfig<'webpack5'>((merge, _: ConfigEnv) => {
             generateScopedName: '[name]__[local]___[hash:base64:5]'
           }
         }
+      },
+      webpackChain(chain) {
+        chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
       }
     },
     rn: {
