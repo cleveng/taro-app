@@ -1,6 +1,6 @@
-import { appid } from './src/config'
-
 import type { CodegenConfig } from '@graphql-codegen/cli'
+
+import { appid } from './src/config'
 
 const config: CodegenConfig = {
   schema: [
