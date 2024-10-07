@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "esnext",
     "module": "commonjs",
     "removeComments": false,
     "preserveConstEnums": true,
@@ -20,10 +20,11 @@
     "typeRoots": ["node_modules/@types"],
     "paths": {
       // TS5090 leading './'
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "#/types/*": ["./types/*"]
     }
   },
-  "include": ["./src", "./types", "./config", "tailwind.config.ts"],
+  "include": ["./src", "./types", "./config", "tailwind.config.ts", "codegen.ts"],
   "exclude": ["node_modules", "dist"],
   "compileOnSave": false
 }

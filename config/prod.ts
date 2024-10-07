@@ -1,6 +1,27 @@
+import TerserPlugin from 'terser-webpack-plugin'
+
 import type { UserConfigExport } from '@tarojs/cli'
+
 export default {
-  mini: {},
+  mini: {
+    // 压缩
+    webpackChain(chain, _webpack) {
+      chain.merge({
+        plugin: {
+          terser: {
+            plugin: TerserPlugin,
+            args: {
+              terserOptions: {
+                compress: true,
+                keep_classnames: true,
+                keep_fnames: true
+              }
+            }
+          }
+        }
+      })
+    }
+  },
   h5: {
     /**
      * WebpackChain 插件配置
@@ -29,4 +50,4 @@ export default {
     //     }))
     // }
   }
-} satisfies UserConfigExport<'vite'>
+} satisfies UserConfigExport<'webpack5'>
