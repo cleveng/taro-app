@@ -1,5 +1,5 @@
-import { appid, version } from '../../package.json'
+import pkg from '../../package.json'
 
-const isDev = process.env.NODE_ENV === 'development'
-
-export { appid, isDev, version }
+export const appid = pkg.appid
+export const version = pkg.version
+export const isDev = process.env.NODE_ENV === 'development'

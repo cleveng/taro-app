@@ -24,7 +24,7 @@ export default class Index extends Component {
         Taro.switchTab({ url: '/pages/index/index' })
         break
       case 1:
-        Taro.navigateTo({ url: '/pages/login/index' })
+        Taro.switchTab({ url: '/pages/login/index' })
         break
       case 2:
         Taro.switchTab({ url: '/pages/machine/index' })

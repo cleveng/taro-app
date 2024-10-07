@@ -1,19 +1,30 @@
+import { getStorageSync, removeStorageSync, setStorageSync } from '@tarojs/taro'
 import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
+import { version } from '../config'
 
-interface BearState {
-  bears: number
-  increase: (by: number) => void
+const asyncLocalStorage = {
+  getItem: getStorageSync,
+  setItem: setStorageSync,
+  removeItem: removeStorageSync
 }
 
-const useBearStore = create<BearState>()(
-  devtools(
-    persist(
-      set => ({
-        bears: 0,
-        increase: by => set(state => ({ bears: state.bears + by }))
-      }),
-      { name: 'bearStore' }
-    )
+export interface CountSlice {
+  value: number
+  increase: (by?: number) => void
+}
+
+export const useCountStore = create<CountSlice>()(
+  persist(
+    (set, get) => ({
+      value: 0,
+      increase: (by = 1) => set({ value: get().value + by })
+    }),
+    {
+      name: 'count',
+      version: parseInt(version.replaceAll('.', ''), 10),
+      partialize: state => ({ value: state.value }),
+      storage: createJSONStorage(() => asyncLocalStorage)
+    }
   )
 )

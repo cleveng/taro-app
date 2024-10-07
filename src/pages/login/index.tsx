@@ -65,7 +65,7 @@ export default function Index() {
           <Form
             labelPosition='top'
             starPosition='left'
-            className=''
+            className='p-0'
             footer={
               <>
                 <Button block type='info' onClick={loginWithWechat}>
@@ -74,9 +74,10 @@ export default function Index() {
               </>
             }
           >
-            <Form.Item required label='邮箱' name='email' rules={[{ required: true, message: '请输入邮箱' }]}>
-              <Input className='nut-input-text' placeholder='请输入邮箱' type='email' />
+            <Form.Item required label='用户名' name='account' rules={[{ required: true, message: '请输入用户名' }]}>
+              <Input placeholder='请输入用户名' type='text' />
             </Form.Item>
+            <Divider />
             <Form.Item
               label='密码'
               name='password'

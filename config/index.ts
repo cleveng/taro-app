@@ -13,7 +13,7 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
     date: '2024-9-4',
     designWidth(input) {
       // question
-      if ((input as never as any)?.file?.replace(/\\+/g, '/').indexOf('@nutui') > -1) {
+      if (input?.file?.replace(/\\+/g, '/').indexOf('@nutui') > -1) {
         return 375
       }
 

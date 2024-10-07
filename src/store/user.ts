@@ -1,19 +1,38 @@
+import { getStorageSync, removeStorageSync, setStorageSync } from '@tarojs/taro'
 import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
+import { version } from '../config'
 
-interface BearState {
-  bears: number
-  increase: (by: number) => void
+const asyncLocalStorage = {
+  getItem: getStorageSync,
+  setItem: setStorageSync,
+  removeItem: removeStorageSync
 }
 
-const useBearStore = create<BearState>()(
-  devtools(
-    persist(
-      set => ({
-        bears: 0,
-        increase: by => set(state => ({ bears: state.bears + by }))
-      }),
-      { name: 'bearStore' }
-    )
+export interface UserSlice {
+  loggedIn: boolean
+  token: string | null
+  login: (token: string) => void
+  logout: () => void
+}
+
+export const useUserStore = create<UserSlice>()(
+  persist(
+    (set, _) => ({
+      loggedIn: false,
+      token: null,
+      login: (token: string) => {
+        set({ loggedIn: true, token })
+      },
+      logout: () => {
+        set({ loggedIn: false, token: null })
+      }
+    }),
+    {
+      name: 'user',
+      version: parseInt(version.replaceAll('.', ''), 10),
+      partialize: state => ({ loggedIn: state.loggedIn, token: state.token }),
+      storage: createJSONStorage(() => asyncLocalStorage)
+    }
   )
 )
